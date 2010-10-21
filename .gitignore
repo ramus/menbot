@@ -1,0 +1,4 @@
+# Compiled files
+*.fasl
+# Generated files
+*.db
