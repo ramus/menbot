@@ -2,6 +2,7 @@
 (in-package :menbot)
 
 (setf drakma:*drakma-default-external-format* ':utf-8)
+(defvar *referer* (concatenate 'string "irc://" *default-server* "/" *nickname*))
 (defvar *failure* "Didn't find anything...")
 
 ;;; Google Search
@@ -11,7 +12,7 @@
                                      ("v" . "1.0")
                                      ("rsz" . "large")
                                      ("start" . ,(write-to-string start)))
-                       :additional-headers '(("Referer" . "irc://irc.rizon.net/ramus"))))
+                       :additional-headers `(("Referer" . ,*referer*))))
 
 (defun google-search (text &key (start 0))
   (let* ((request (json:decode-json-from-string
@@ -43,7 +44,7 @@
                                      ("rsz" . "large")
                                      ("start" . ,(write-to-string start))
                                      ("safe" . "off"))
-                       :additional-headers '(("Referer" . "irc://irc.rizon.net/ramus"))))
+                       :additional-headers `(("Referer" . ,*referer*))))
 
 (defun google-image-search (text &key (start 0))
   (let* ((request (json:decode-json-from-string
@@ -76,7 +77,7 @@
                                                (if (string= src "auto") "" src)
                                                dst))
                                      ("v" . "1.0"))
-                       :additional-headers '(("Referer" . "irc://irc.rizon.net/ramus"))))
+                       :additional-headers `(("Referer" . ,*referer*))))
 
 (defun google-translate (src dst text)
   (let* ((res (json:decode-json-from-string (translate-request src dst text)))
@@ -97,7 +98,7 @@ two-letter codes) using the Google Translate API."
   (drakma:http-request "http://gdata.youtube.com/feeds/api/videos"
                        :parameters (list (cons "q" query)
                                          (cons "v" "1.0"))
-                       :additional-headers '(("Referer" . "irc://irc.rizon.net/ramus"))))
+                       :additional-headers `(("Referer" . ,*referer*))))
 
 (defun youtube-search (query)
   (klacks:with-open-source (source (cxml:make-source (youtube-request query)))
