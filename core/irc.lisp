@@ -23,15 +23,9 @@
                       (and pos (subseq text (1+ pos)))))
          (func (gethash command *commands*)))
     (when (and func (not (equal *src* *dest*))) ; not handling queries
-      (unless (some #'identity
-                    (mapcar (lambda (arg)
-                              (destructuring-bind (fun id) arg
-                                (string= (funcall fun (find-user *connection* *src*))
-                                         id)))
-                            '((username "Osamu"))))
-        (let ((res (funcall func)))
-          (when res
-            (privmsg *connection* *dest* res)))))))
+      (let ((res (funcall func)))
+        (when res
+          (privmsg *connection* *dest* res))))))
 
 (defun invite-hook (message)
   (let ((channel (first (last (arguments message)))))
