@@ -26,7 +26,8 @@
   (let ((notes (gethash channel *notes-db*)))
     (setf (gethash topic notes) note)
     (cl-store:store notes (notes-db channel))
-    (bk-tree:insert-value topic (gethash channel *notes-search*))))
+    (handler-case (bk-tree:insert-value topic (gethash channel *notes-search*))
+      (bk-tree:duplicate-value () t))))
 
 (defun remove-note (topic channel)
   (let ((notes (gethash channel *notes-db*)))
@@ -62,7 +63,7 @@ creates a note with `arg'. If neither is provided, a random note is retrieved."
          (let ((note (get-note topic *dest*)))
            (if note
                (format nil "~A ~{~A~^ ~}" topic note)
-               (let ((matches (search-note topic channel)))
+               (let ((matches (search-note topic *dest*)))
                  (if matches
                      (format nil "Nothin' here. Did you mean ~{~#[~;~a~;~a or ~a~:;~@{~a~#[~;, or ~:;, ~]~}~]~}?"
                              matches)

@@ -54,7 +54,8 @@
     (setf (gethash event events) time)
     (cl-store:store events (events-db channel))
     (add-event-timer event channel time)
-    (bk-tree:insert-value event (gethash channel *event-search*))))
+    (handler-case (bk-tree:insert-value event (gethash channel *event-search*))
+      (bk-tree:duplicate-value () t))))
 
 (defun remove-event (event channel)
   (let ((events (gethash channel *events*)))
@@ -117,7 +118,7 @@ provided, creates the `event' occuring at `time' (UTC)."
            (if time
                (let ((remaining (- time (get-universal-time))))
                  (print-remaining-time event remaining))
-               (let ((matches (search-event event channel)))
+               (let ((matches (search-event event *dest*)))
                  (format nil "Nothin' here. Did you mean ~{~#[~;~a~;~a or ~a~:;~@{~a~#[~;, or ~:;, ~]~}~]~}?"
                          matches)
                  "Never."))))
