@@ -25,5 +25,4 @@
                (:module extra
                         :components ((:file "notes")
                                      (:file "when")
-                                     (:file "google")
-                                     (:file "random")))))
+                                     (:file "google")))))
