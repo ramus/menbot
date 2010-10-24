@@ -119,9 +119,10 @@ provided, creates the `event' occuring at `time' (UTC)."
                (let ((remaining (- time (get-universal-time))))
                  (print-remaining-time event remaining))
                (let ((matches (search-event event *dest*)))
-                 (format nil "Nothin' here. Did you mean ~{~#[~;~a~;~a or ~a~:;~@{~a~#[~;, or ~:;, ~]~}~]~}?"
-                         matches)
-                 "Never."))))
+                 (if matches
+                     (format nil "Nothin' here. Did you mean ~{~#[~;~a~;~a or ~a~:;~@{~a~#[~;, or ~:;, ~]~}~]~}?"
+                             matches)
+                     "Never.")))))
         (t (multiple-value-bind (event time) (get-random-event *dest*)
              (when time
                (print-remaining-time event
