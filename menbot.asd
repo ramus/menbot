@@ -10,7 +10,6 @@
                #:bk-tree
                #:cl-json
                #:cl-store
-               #:cl-twit
                #:chronicity
                #:cxml
                #:drakma
