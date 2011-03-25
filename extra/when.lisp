@@ -80,9 +80,9 @@
 (defun search-event (event channel)
   (let ((tree (gethash channel *event-search*)))
     (mapcar #'bk-tree:value-of
-            (bk-tree:search-value event tree
-                                  :threshold (floor (/ (length event) 2))
-                                  :ordered-results t))))
+            (ignore-errors (bk-tree:search-value event tree
+                                                 :threshold (floor (/ (length event) 2))
+                                                 :ordered-results t)))))
 
 ;; Database initialization
 (defun when-join-hook (message)
@@ -136,4 +136,4 @@ provided, creates the `event' occuring at `time' (UTC)."
                                        (print-remaining-time (car event)
                                                              (- (cdr event)
                                                                 (get-universal-time))))
-                                   (subseq sorted 0 5)))))
+                                   (loop repeat 5 for x in sorted collect x)))))

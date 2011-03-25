@@ -51,9 +51,9 @@
 (defun search-note (topic channel)
   (let ((tree (gethash channel *notes-search*)))
     (mapcar #'bk-tree:value-of
-            (bk-tree:search-value topic tree
-                                  :threshold (floor (/ (length topic) 2))
-                                  :ordered-results t))))
+            (ignore-errors (bk-tree:search-value topic tree
+                                                 :threshold (floor (/ (length topic) 2))
+                                                 :ordered-results t)))))
 
 (defcommand note (&optional topic &rest note)
   "note arg [rest ...] - Retrieve the note with `arg'. If `rest' is provided,
